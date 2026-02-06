@@ -1,0 +1,35 @@
+---
+- name: Configure Web Servers
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Apache and PHP
+      apt:
+        name:
+          - apache2
+          - php
+          - php-mysql
+        state: present
+
+    - name: Start and enable Apache
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Remove default index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent
+
+    - name: Clone application from GitHub
+      git:
+        repo: https://github.com/thrishak2004/aws-capstone-exam.git
+        dest: /var/www/html
+        version: main
+        force: yes
