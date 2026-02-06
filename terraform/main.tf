@@ -81,7 +81,7 @@ resource "aws_security_group" "web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["YOUR_IP/32"]
+    cidr_blocks = ["125.16.142.82/32"]
   }
 
   egress {
@@ -108,7 +108,7 @@ resource "aws_security_group" "rds_sg" {
 # --------------------
 resource "aws_instance" "web" {
   count                  = 2
-  ami                    = "ami-0c02fb55956c7d316"
+  ami                    = "ami-0b6c6ebed2801a5cb"
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.public[count.index].id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
