@@ -1,0 +1,40 @@
+---
+- name: Deploy Web Application on EC2
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Apache and PHP
+      apt:
+        name:
+          - apache2
+          - php
+          - php-mysql
+        state: present
+
+    - name: Ensure Apache is started
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Remove default index.html (if exists)
+      file:
+        path: /var/www/html/index.html
+        state: absent
+
+    - name: Clone Web Application from GitHub
+      git:
+        repo: 'https://github.com/thrishak2004/aws-capstone-exam.git'
+        dest: /var/www/html
+        version: main
+        force: yes
+
+    - name: Restart Apache to apply changes
+      service:
+        name: apache2
+        state: restarted
